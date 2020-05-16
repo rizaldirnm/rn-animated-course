@@ -23,20 +23,25 @@ export default () => {
   const startTime = new Value(0)
   const duration = 1000
   const endTime = add(startTime, duration)
-  const from = new Value(1)
-  const to = new Value(0)
+  const from = new Value(0)
+  const to = new Value(1)
   const opacity = interpolate(clock, {
     inputRange: [startTime, endTime],
     outputRange: [from, to],
     extrapolate: Extrapolate.CLAMP
   })
-  useCode(() => [cond(eq(startAnimation, 1), [
-    startClock(clock),
-    set(startTime, clock),
-    set(from, not(to)),
-    set(to, not(to)),
-    set(startAnimation, 0)
-  ])], [clock, from, startAnimation, startTime, to])
+  useCode(
+    () => [
+      cond(eq(startAnimation, 1), [
+        startClock(clock),
+        set(startTime, clock),
+        set(from, not(from)),
+        set(to, not(to)),
+        set(startAnimation, 0),
+      ]),
+    ],
+    [clock, from, startAnimation, startTime, to]
+  )
 
   return (
     <View style={styles.container}>
